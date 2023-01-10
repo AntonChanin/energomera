@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import useAxios from './hooks/useAxios';
 
 
 (mapboxgl as any).accessToken=import.meta.env.VITE_REACT_APP_MAPBOX_ACCESS_TOKEN ?? 'pk.eyJ1IjoiYW50b24taGFuaW4iLCJhIjoiY2szaDd6c2JwMDdlbTNkcGg2bTFvdzBheiJ9.qDd64OW7F78wdHWwTzsuAA';
@@ -17,6 +18,7 @@ const Map: FC = () => {
     lat: 42.50865653359858,
     zoom: 6
   });
+  const { response, error, loading } = useAxios()
 
   	// Create map and lay over markers
   useEffect(() => {
@@ -26,8 +28,7 @@ const Map: FC = () => {
 			style: 'mapbox://styles/mapbox/outdoors-v12', 
 			center: [lng, lat],
 			zoom
-		})
-    
+		});
 
     map.on('load', () => {
       map.addSource('maine', {
