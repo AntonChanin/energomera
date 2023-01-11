@@ -30,9 +30,7 @@ const Map: FC = () => {
   useMap({ ...request, state, mapContainer });
 
 	return (
-    <div>
-      <div id='mapContainer' ref={mapContainer} style={{ width:'100%', height:'100vh' }}/>
-    </div>
+    <div id='mapContainer' ref={mapContainer} style={{ width:'100%', height:'100vh' }}/>
   );   
 }
 
