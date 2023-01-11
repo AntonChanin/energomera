@@ -1,0 +1,9 @@
+.mapboxgl-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  position: unset !important;
+}
+
+.mapboxgl-control-container {
+  display: none;
+}
