@@ -1,20 +1,23 @@
-class Poligon {
-  owner: mapboxgl.Map | null = null;
+import { MapboxglSource, MapboxglMap } from '../types/mapboxgl';
+import { PoligonProps, PolygonLocation } from '../types/polygon';
+
+class Polygon {
+  owner: MapboxglMap | null = null;
   $id = '';
   Id = 0;
   Name = '';
   Size = 0;
   IsRemoved = false;
   SyncId = '';
-  Location = {
-    Center: [0, 0],
-    Polygon: [[0]],
+  Location: PolygonLocation = {
+    Center: [],
+    Polygon: [],
   };
   OrganizationId = 0;
   SyncDate = new Date();
 
   constructor(
-    options = {
+    options: PoligonProps = {
       $id: '',
       Id: 0,
       Name: '',
@@ -23,12 +26,12 @@ class Poligon {
       SyncId: '',
       Location: {
         Center: [0, 0],
-        Polygon: [[0, 0]],
+        Polygon: [[0, 0], [-1, -1], [1, 1]],
       },
       OrganizationId: 0,
       SyncDate: new Date(),
     },
-    owner:  mapboxgl.Map,
+    owner:  MapboxglMap,
   ) {
     const { $id, Id, Name, Size, IsRemoved, SyncId, Location, OrganizationId, SyncDate } = options;
     this.$id = $id;
@@ -44,7 +47,7 @@ class Poligon {
   }
 
   didMount() {
-    const source: mapboxgl.AnySourceData = {
+    const source: MapboxglSource = {
       'type': 'geojson',
       'data': {
         'type': 'Feature',
@@ -63,35 +66,33 @@ class Poligon {
   addLayers(layers: string[]) {
     layers.forEach((layer) => {
       if (layer === 'outline') {
-        // Add a black outline around the polygon.
         this.owner?.addLayer({
           'id': `${layers[0]}-${layer}`,
           'type': 'line',
           'source': `${this.$id}_${this.Name}`,
           'layout': {},
           'paint': {
-            'line-color': '#000',
+            'line-color': '#fff',
             'line-width': 3
           }
         });
         return;
       }
-      // Add a new layer to visualize the polygon.
+
       this.owner?.addLayer({
         'id': layer,
         'type': 'fill',
-        'source': `${this.$id}_${this.Name}`, // reference the data source
+        'source': `${this.$id}_${this.Name}`,
         'layout': {},
         'paint': {
-          'fill-color': '#f9a602', // blue color fill
-          'fill-opacity': 0.4
+          'fill-color': '#fff',
+          'fill-opacity': 0.1
         }
       })
     })
     return this;
   }
-
    
 }
 
-export default Poligon;
+export default Polygon;
