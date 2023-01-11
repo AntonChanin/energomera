@@ -10,10 +10,10 @@ class PointCollection {
       source: 'earthquakes',
       filter: ['!', ['has', 'point_count']],
       paint: {
-        'circle-color': '#11b4da',
+        'circle-color': 'green',
         'circle-radius': 10,
         'circle-stroke-width': 1,
-        'circle-stroke-color': '#fff'
+        'circle-stroke-color': '#000'
       }
     },
     'unclustered-text': {
@@ -23,7 +23,10 @@ class PointCollection {
       layout: {
         'text-field': ['get', 'info_text'],
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 12
+        'text-size': 12,
+      },
+      paint: {
+        "text-color": "#ffffff"
       }
     }
   }

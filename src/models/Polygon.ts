@@ -72,7 +72,7 @@ class Polygon {
           'source': `${this.$id}_${this.Name}`,
           'layout': {},
           'paint': {
-            'line-color': '#000',
+            'line-color': '#fff',
             'line-width': 3
           }
         });
@@ -85,8 +85,8 @@ class Polygon {
         'source': `${this.$id}_${this.Name}`,
         'layout': {},
         'paint': {
-          'fill-color': '#f9a602',
-          'fill-opacity': 0.4
+          'fill-color': '#fff',
+          'fill-opacity': 0.1
         }
       })
     })
