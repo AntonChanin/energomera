@@ -5,14 +5,14 @@ import axios from 'axios';
 
 axios.defaults.baseURL = import.meta.env.VITE_AGRO_URL;
 
-const useAxios = () => {
+const useAxios = (query: string) => {
     const [response, setResponse] = useState<any[]>([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
 
     const fetchData = () => {
       axios
-        .get('')
+        .get(query)
         .then((res) => {
           setResponse(res.data);
         })
