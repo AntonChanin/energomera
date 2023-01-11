@@ -1,5 +1,5 @@
 import { MapboxglSource, MapboxglMap } from '../types/mapboxgl';
-import { PolygonLocation } from '../types/polygon';
+import { PoligonProps, PolygonLocation } from '../types/polygon';
 
 class Polygon {
   owner: MapboxglMap | null = null;
@@ -17,7 +17,7 @@ class Polygon {
   SyncDate = new Date();
 
   constructor(
-    options = {
+    options: PoligonProps = {
       $id: '',
       Id: 0,
       Name: '',
@@ -66,7 +66,6 @@ class Polygon {
   addLayers(layers: string[]) {
     layers.forEach((layer) => {
       if (layer === 'outline') {
-        // Add a black outline around the polygon.
         this.owner?.addLayer({
           'id': `${layers[0]}-${layer}`,
           'type': 'line',
@@ -79,21 +78,20 @@ class Polygon {
         });
         return;
       }
-      // Add a new layer to visualize the polygon.
+
       this.owner?.addLayer({
         'id': layer,
         'type': 'fill',
-        'source': `${this.$id}_${this.Name}`, // reference the data source
+        'source': `${this.$id}_${this.Name}`,
         'layout': {},
         'paint': {
-          'fill-color': '#f9a602', // gold color fill
+          'fill-color': '#f9a602',
           'fill-opacity': 0.4
         }
       })
     })
     return this;
   }
-
    
 }
 
