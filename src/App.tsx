@@ -1,13 +1,13 @@
 import React from 'react'
 
-import Map from './components/Map';
+import MapView from './components/MapView';
 import './App.css'
 
 
 function App() {
   return (
     <div className="App">
-      <Map />
+      <MapView />
     </div>
   )
 }

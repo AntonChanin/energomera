@@ -5,11 +5,11 @@ import useAxios from '../../hooks/useAxios';
 import useMap from '../../hooks/useMap';
 import { MapState } from '../../types/map';
 import { PolygonRequest } from '../../types/net';
-import './Map.css';
+import './MapView.css';
 
 (mapboxgl as any).accessToken=import.meta.env.VITE_REACT_APP_MAPBOX_ACCESS_TOKEN;
 
-const Map: FC = () => {
+const MapView: FC = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<MapState>({
     params: {
@@ -35,4 +35,4 @@ const Map: FC = () => {
   );   
 }
 
-export default Map;
+export default MapView;

@@ -1,11 +1,8 @@
-import mapboxgl from 'mapbox-gl';
 import { RefObject, useEffect } from 'react';
 
-import PointCollection from '../models/PointCollection';
-import Polygon from '../models/Polygon';
-import addPoint from '../utils/addPoint';
 import { MapState } from '../types/map';
 import { PolygonLocation, RowPolygonProps } from '../types/polygon';
+import UserMapboxglMap from '../models/UserMapboxglMap';
 
 type Props = {
   response: RowPolygonProps[];
@@ -21,19 +18,14 @@ const useMap: (props: Props) => void = ({
   useEffect(() => {
     const { params: {lat, lng, zoom }, styles: { style } } = state;
     if (!loading && !error) {
-      const map = mapContainer.current && new mapboxgl.Map({
+      const map = mapContainer.current && new UserMapboxglMap({
         container: mapContainer.current,
         style, 
         center: [lng, lat],
         zoom
-      });
+      }).didMount();
       
-      const points: any = {
-        'type': 'FeatureCollection',
-        "features": [],
-      };
-
-      map && map.on('load', () => {
+      map && map.self?.on('load', () => {
         response
           .map((polygon) => {
             const { Center, Polygon } = JSON.parse(polygon.Location) as PolygonLocation;
@@ -46,48 +38,13 @@ const useMap: (props: Props) => void = ({
               SyncDate: new Date(polygon.SyncDate)
             })
           })
-          .map((polygon) => {
-            new Polygon(polygon, map)
-              .didMount()
-              .addLayers({
-                'fill': {
-                  'fill-color': '#fff',
-                  'fill-opacity': 0.1
-                },
-                'line': {
-                  'line-color': '#fff',
-                  'line-width': 3
-                }
-              });
-            new Polygon({
-              ...polygon,
-              $id: `${polygon.$id}_label`,
-              Location: {
-                ...polygon.Location,
-                Polygon: [
-                  [polygon.Location.Center[1] - 0.0005, polygon.Location.Center[0] + 0.001],
-                  [polygon.Location.Center[1] + 0.0005, polygon.Location.Center[0] + 0.001],
-                  [polygon.Location.Center[1] + 0.0005, polygon.Location.Center[0] - 0.001],
-                  [polygon.Location.Center[1] - 0.0005, polygon.Location.Center[0] - 0.001],
-                ]
-              }
-            }, map)
-              .didMount()
-              .addLayers({
-                'fill': {
-                  'fill-color': 'green',
-                },
-                'line': {
-                  'line-color': '#000',
-                  'line-width': 3
-                }
-              });
-            addPoint({ points, source: polygon });
-              return;
+          .forEach((polygon) => {
+            map.self && map.fillField(polygon);
+            map.self && map.addLabel(polygon);
+            map.self && map.addPoint(polygon);
+            return;
           });
-        new PointCollection({ points }, map)
-          .didMount()
-          .addLayers(['unclustered-text'])
+          map.createPointCollection();
       })
     }
   }, [loading, mapContainer])
