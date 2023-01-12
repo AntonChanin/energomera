@@ -1,4 +1,4 @@
-import { PolygonProps } from './polygon';
+import { RowPolygonProps } from './polygon';
 
 type QueryParams = {
   lastChangeDate: string;
@@ -7,7 +7,7 @@ type QueryParams = {
 }
 
 type PolygonRequest = {
-  response: PolygonProps[]
+  response: RowPolygonProps[]
   error: string;
   loading: boolean;
 }

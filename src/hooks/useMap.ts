@@ -5,7 +5,7 @@ import PointCollection from '../models/PointCollection';
 import Polygon from '../models/Polygon';
 import addPoint from '../utils/addPoint';
 import { MapState } from '../types/map';
-import { PolygonLocation, PolygonProps, RowPolygonProps } from '../types/polygon';
+import { PolygonLocation, RowPolygonProps } from '../types/polygon';
 
 type Props = {
   response: RowPolygonProps[];
