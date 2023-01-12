@@ -3,11 +3,12 @@ import { RefObject, useEffect } from 'react';
 
 import PointCollection from '../models/PointCollection';
 import Polygon from '../models/Polygon';
-import { MapState } from '../types/map';
 import addPoint from '../utils/addPoint';
+import { MapState } from '../types/map';
+import { PolygonLocation, PolygonProps, RowPolygonProps } from '../types/polygon';
 
 type Props = {
-  response: any[];
+  response: RowPolygonProps[];
   loading: boolean;
   error: string;
   state: MapState;
@@ -35,21 +36,58 @@ const useMap: (props: Props) => void = ({
       map && map.on('load', () => {
         response
           .map((polygon) => {
-            const { Center, Polygon } = JSON.parse(polygon.Location);
+            const { Center, Polygon } = JSON.parse(polygon.Location) as PolygonLocation;
             return ({
               ...polygon,
               Location: {
                 Center: Center.reverse(),
                 Polygon,
-              }
+              },
+              SyncDate: new Date(polygon.SyncDate)
             })
           })
           .map((polygon) => {
-            new Polygon(polygon, map).didMount().addLayers([polygon.$id, 'outline']);
+            new Polygon(polygon, map)
+              .didMount()
+              .addLayers({
+                'fill': {
+                  'fill-color': '#fff',
+                  'fill-opacity': 0.1
+                },
+                'line': {
+                  'line-color': '#fff',
+                  'line-width': 3
+                }
+              });
+            new Polygon({
+              ...polygon,
+              $id: `${polygon.$id}_label`,
+              Location: {
+                ...polygon.Location,
+                Polygon: [
+                  [polygon.Location.Center[1] - 0.0005, polygon.Location.Center[0] + 0.001],
+                  [polygon.Location.Center[1] + 0.0005, polygon.Location.Center[0] + 0.001],
+                  [polygon.Location.Center[1] + 0.0005, polygon.Location.Center[0] - 0.001],
+                  [polygon.Location.Center[1] - 0.0005, polygon.Location.Center[0] - 0.001],
+                ]
+              }
+            }, map)
+              .didMount()
+              .addLayers({
+                'fill': {
+                  'fill-color': 'green',
+                },
+                'line': {
+                  'line-color': '#000',
+                  'line-width': 3
+                }
+              });
             addPoint({ points, source: polygon });
-            return;
+              return;
           });
-        new PointCollection({ points }, map).didMount().addLayers(['unclustered-point', 'unclustered-text'])
+        new PointCollection({ points }, map)
+          .didMount()
+          .addLayers(['unclustered-text'])
       })
     }
   }, [loading, mapContainer])

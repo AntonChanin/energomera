@@ -1,5 +1,5 @@
 import { MapboxglSource, MapboxglMap } from '../types/mapboxgl';
-import { PoligonProps, PolygonLocation } from '../types/polygon';
+import { PolygonProps, PolygonLocation } from '../types/polygon';
 
 class Polygon {
   owner: MapboxglMap | null = null;
@@ -17,7 +17,7 @@ class Polygon {
   SyncDate = new Date();
 
   constructor(
-    options: PoligonProps = {
+    options: PolygonProps = {
       $id: '',
       Id: 0,
       Name: '',
@@ -63,31 +63,26 @@ class Polygon {
     return this;
   }
 
-  addLayers(layers: string[]) {
-    layers.forEach((layer) => {
-      if (layer === 'outline') {
+  addLayers(layers: Record<'line' | 'fill', Record<string, string | number>>) {
+    const layersKeys = Object.keys(layers) as ('line' | 'fill')[]
+    layersKeys.forEach((layerKey) => {
+      if (layerKey === 'line') {
         this.owner?.addLayer({
-          'id': `${layers[0]}-${layer}`,
-          'type': 'line',
+          'id': `${this.$id}-${layerKey}`,
+          'type': layerKey,
           'source': `${this.$id}_${this.Name}`,
           'layout': {},
-          'paint': {
-            'line-color': '#fff',
-            'line-width': 3
-          }
+          'paint': layers[layerKey],
         });
         return;
       }
 
       this.owner?.addLayer({
-        'id': layer,
-        'type': 'fill',
+        'id': this.$id,
+        'type': layerKey, //'fill',
         'source': `${this.$id}_${this.Name}`,
         'layout': {},
-        'paint': {
-          'fill-color': '#fff',
-          'fill-opacity': 0.1
-        }
+        'paint': layers[layerKey],
       })
     })
     return this;

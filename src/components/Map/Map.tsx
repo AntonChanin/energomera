@@ -4,6 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import useAxios from '../../hooks/useAxios';
 import useMap from '../../hooks/useMap';
 import { MapState } from '../../types/map';
+import { PolygonRequest } from '../../types/net';
 import './Map.css';
 
 (mapboxgl as any).accessToken=import.meta.env.VITE_REACT_APP_MAPBOX_ACCESS_TOKEN;
@@ -26,7 +27,7 @@ const Map: FC = () => {
     take:100,
   });
 
-  const request = useAxios(queryParams);
+  const request: PolygonRequest = useAxios(queryParams);
   useMap({ ...request, state, mapContainer });
 
 	return (

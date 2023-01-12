@@ -1,8 +1,10 @@
+import { PolygonProps } from '../types/polygon';
+
 const addPoint = (
   { points, source } : {
-  points: any, source: any
+  points: any, source: PolygonProps
 }) => {
-  const { Name, Location: { Center } } = source
+  const { Name, Location: { Center } } = source;
   points.features.push({
     "type": "Feature",
     "properties": { "info_text": Name },

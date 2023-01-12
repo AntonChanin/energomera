@@ -3,16 +3,24 @@ type PolygonLocation = {
     Polygon: number[][];
 };
 
-type PoligonProps = {
+type BasePolygonProps = {
     $id: string;
     Id: number;
     Name: string,
     Size: number;
     IsRemoved: boolean;
     SyncId: string;
-    Location: PolygonLocation;
     OrganizationId: number;
-    SyncDate: Date;
-}
+};
 
-export type { PolygonLocation, PoligonProps };
+type RowPolygonProps = BasePolygonProps & {
+    SyncDate: string;
+    Location: string;
+};
+
+type PolygonProps = BasePolygonProps & {
+    Location: PolygonLocation;
+    SyncDate: Date;
+};
+
+export type { PolygonLocation, PolygonProps, RowPolygonProps };
